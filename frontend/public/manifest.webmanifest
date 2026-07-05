@@ -1,0 +1,18 @@
+{
+  "name": "QuipuRecicla",
+  "short_name": "QuipuRecicla",
+  "description": "Rastrea el vencimiento de tus alimentos y aprende a reciclar sus envases.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f2eb",
+  "theme_color": "#0f4023",
+  "lang": "es-PE",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

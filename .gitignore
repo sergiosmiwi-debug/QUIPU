@@ -1,0 +1,19 @@
+# Node / Next.js
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Secretos y datos locales
+.env
+.env.local
+*.db
+
+# Vercel
+.vercel/
