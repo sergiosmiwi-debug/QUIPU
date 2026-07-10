@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    // rutas de la versión anterior
+    return [
+      { source: "/scan", destination: "/anotar", permanent: true },
+      { source: "/ecopuntos", destination: "/reciclar", permanent: true },
+      { source: "/dashboard", destination: "/huella", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

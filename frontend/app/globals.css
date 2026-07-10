@@ -1,52 +1,95 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
 @import "tailwindcss";
 
+/*
+ * QuipuRecicla — sistema de diseño "quipu"
+ * Concepto: los incas llevaban las cuentas de sus almacenes con quipus
+ * (cuerdas anudadas). La app anuda lo que entra a tu casa.
+ * Paleta: morado chicha (maíz morado) como color comprometido,
+ * fucsia qantu como acento, estados en verde/ámbar/rojo ladrillo.
+ */
+
 :root {
-  --bg: #f5f2eb;
-  --surface: #ffffff;
-  --border: #e0d9cc;
-  --border-lo: #e8e2d8;
-  --brand: #1c3d2a;
-  --brand-mid: #1c7a4a;
-  --brand-bg: #e4f4ec;
-  --violet: #7c3fbf;
-  --violet-bg: #f0eaff;
-  --amber: #c97a1a;
-  --amber-bg: #fdf0e0;
-  --fresh: #1c7a4a;
-  --fresh-bg: #e4f4ec;
-  --fresh-txt: #0f5533;
-  --warn: #c97a1a;
-  --warn-bg: #fdf0e0;
-  --warn-txt: #9a5a0e;
-  --danger: #8c2218;
-  --danger-bg: #fde8e6;
-  --danger-txt: #701414;
-  --muted: #a09880;
-  --muted-bg: #f0ece4;
-  --muted-txt: #6b5f4a;
-  --ink-1: #1a1714;
-  --ink-2: #4a3f35;
-  --ink-3: #a09880;
-  --gradient-header: linear-gradient(145deg, #0f4023 0%, #1c7a4a 55%, #0a5c4e 100%);
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-body: "Jost", system-ui, sans-serif;
-  --shadow-card: 0 1px 3px rgba(28, 61, 42, 0.06), 0 4px 16px rgba(28, 61, 42, 0.07);
-  --shadow-nav: 0 8px 32px rgba(28, 61, 42, 0.16), 0 2px 8px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(28, 61, 42, 0.08);
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* Marca */
+  --chicha: oklch(0.34 0.11 315);
+  --chicha-deep: oklch(0.25 0.09 315);
+  --chicha-mid: oklch(0.46 0.13 315);
+  --chicha-tint: oklch(0.94 0.025 315);
+  --qantu: oklch(0.56 0.2 358);
+  --qantu-tint: oklch(0.94 0.04 358);
+
+  /* Neutrales (tintados hacia el tono de marca, no crema) */
+  --bg: oklch(0.972 0.007 315);
+  --surface: oklch(0.995 0.002 315);
+  --ink: oklch(0.23 0.03 315);
+  --ink-soft: oklch(0.4 0.03 315);
+  --ink-faint: oklch(0.5 0.025 315);
+  --line: oklch(0.89 0.012 315);
+  --line-soft: oklch(0.93 0.008 315);
+
+  /* Estados de vencimiento */
+  --fresco: oklch(0.5 0.13 152);
+  --fresco-tint: oklch(0.94 0.045 152);
+  --fresco-ink: oklch(0.36 0.1 152);
+  --pronto: oklch(0.62 0.13 75);
+  --pronto-tint: oklch(0.95 0.055 85);
+  --pronto-ink: oklch(0.44 0.1 70);
+  --urgente: oklch(0.55 0.17 40);
+  --urgente-tint: oklch(0.94 0.04 40);
+  --urgente-ink: oklch(0.42 0.14 38);
+  --vencido: oklch(0.42 0.04 315);
+  --vencido-tint: oklch(0.92 0.012 315);
+
+  /* Bolsas de segregación (Perú: reciclables / cartón / general+orgánico) */
+  --bolsa-verde: oklch(0.46 0.11 155);
+  --bolsa-verde-tint: oklch(0.94 0.045 155);
+  --bolsa-carton: oklch(0.52 0.09 70);
+  --bolsa-carton-tint: oklch(0.95 0.04 80);
+  --bolsa-negra: oklch(0.28 0.01 315);
+  --bolsa-negra-tint: oklch(0.93 0.005 315);
+
+  /* Tipografía */
+  --font-display: "Young Serif", "Georgia", serif;
+  --font-body: "Figtree", system-ui, sans-serif;
+
+  /* Elevación y forma */
+  --shadow-1: 0 1px 2px oklch(0.25 0.09 315 / 0.05), 0 3px 10px oklch(0.25 0.09 315 / 0.06);
+  --shadow-2: 0 4px 24px oklch(0.25 0.09 315 / 0.14), 0 1px 4px oklch(0.25 0.09 315 / 0.08);
+  --radius: 14px;
+
+  /* Movimiento */
+  --ease-out: cubic-bezier(0.19, 1, 0.22, 1);
+
+  /* Escala z semántica */
+  --z-sticky: 30;
+  --z-nav: 40;
+  --z-sheet-backdrop: 50;
+  --z-sheet: 51;
+  --z-toast: 60;
 }
 
 html {
-  color-scheme: light !important;
+  color-scheme: light;
 }
 
 body {
-  background: var(--bg) !important;
-  color: var(--ink-1);
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Ocultar scrollbars */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Scrollbars discretos en el contenedor móvil */
 * {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -55,10 +98,23 @@ body {
   display: none;
 }
 
-@keyframes fadeUp {
+/* ---------- Movimiento ---------- */
+
+@keyframes knot-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -66,7 +122,7 @@ body {
   }
 }
 
-@keyframes fadeIn {
+@keyframes fade {
   from {
     opacity: 0;
   }
@@ -75,33 +131,47 @@ body {
   }
 }
 
-@keyframes scaleIn {
+@keyframes sheet-up {
   from {
-    opacity: 0;
-    transform: scale(0.95);
+    transform: translateY(100%);
   }
   to {
-    opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
 }
 
-.anim-card {
-  animation: fadeUp 240ms var(--ease-out) both;
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 oklch(0.56 0.2 358 / 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 18px oklch(0.56 0.2 358 / 0);
+  }
 }
 
-.anim-bar {
-  animation: fadeIn 200ms var(--ease-out) both;
+.anim-knot {
+  animation: knot-in 320ms var(--ease-out) both;
 }
-
-.anim-scale {
-  animation: scaleIn 200ms var(--ease-out) both;
+.anim-rise {
+  animation: rise 360ms var(--ease-out) both;
+}
+.anim-fade {
+  animation: fade 240ms var(--ease-out) both;
+}
+.anim-sheet {
+  animation: sheet-up 340ms var(--ease-out) both;
+}
+.anim-pulse {
+  animation: pulse-ring 1.4s ease-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .anim-card,
-  .anim-bar,
-  .anim-scale {
+  .anim-knot,
+  .anim-rise,
+  .anim-sheet {
+    animation: fade 150ms ease-out both;
+  }
+  .anim-pulse {
     animation: none;
   }
 }

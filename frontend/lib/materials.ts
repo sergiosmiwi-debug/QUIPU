@@ -1,65 +1,94 @@
 import type { Material } from "./types";
 
-// Segregación doméstica peruana: bolsa verde (reciclables), caja (cartón/papel),
-// bolsa negra (generales + orgánico).
-export const BIN_COLORS = {
-  verde: "#1c7a4a",
-  caja: "#9a6b2c",
-  negra: "#2b2b2b",
-  desconocido: "#b7b0a2",
-} as const;
+/**
+ * Segregación doméstica peruana:
+ * bolsa verde (reciclables: plástico, vidrio, metal),
+ * caja aparte (cartón y papel),
+ * bolsa negra (generales + orgánico).
+ */
+export type Bag = "verde" | "carton" | "negra" | "desconocido";
+
+export interface BagInfo {
+  name: string;
+  short: string;
+  color: string;
+  tint: string;
+}
+
+export const BAGS: Record<Bag, BagInfo> = {
+  verde: {
+    name: "Bolsa verde · Reciclables",
+    short: "Bolsa verde",
+    color: "var(--bolsa-verde)",
+    tint: "var(--bolsa-verde-tint)",
+  },
+  carton: {
+    name: "Caja aparte · Cartón y papel",
+    short: "Caja de cartón",
+    color: "var(--bolsa-carton)",
+    tint: "var(--bolsa-carton-tint)",
+  },
+  negra: {
+    name: "Bolsa negra · General y orgánico",
+    short: "Bolsa negra",
+    color: "var(--bolsa-negra)",
+    tint: "var(--bolsa-negra-tint)",
+  },
+  desconocido: {
+    name: "Sin identificar",
+    short: "Por confirmar",
+    color: "var(--ink-faint)",
+    tint: "var(--line-soft)",
+  },
+};
 
 export interface MaterialInfo {
   label: string;
-  binColor: string;
-  binName: string;
+  bag: Bag;
   tip: string;
 }
 
 export const MATERIALS: Record<Material, MaterialInfo> = {
   plastico: {
     label: "Plástico",
-    binColor: BIN_COLORS.verde,
-    binName: "Bolsa verde",
-    tip: "Enjuaga la botella o envase, aplástalo y ponlo en la bolsa verde de reciclables.",
+    bag: "verde",
+    tip: "Enjuágalo, aplástalo y a la bolsa verde. Un envase sucio contamina toda la bolsa.",
   },
   vidrio: {
     label: "Vidrio",
-    binColor: BIN_COLORS.verde,
-    binName: "Bolsa verde",
-    tip: "Enjuaga el frasco o botella y ponlo entero (sin romper) en la bolsa verde de reciclables.",
+    bag: "verde",
+    tip: "Enjuágalo y ponlo entero (sin romper) en la bolsa verde.",
   },
   metal: {
     label: "Metal",
-    binColor: BIN_COLORS.verde,
-    binName: "Bolsa verde",
-    tip: "Enjuaga la lata y aplástala si puedes. Va en la bolsa verde de reciclables.",
+    bag: "verde",
+    tip: "Enjuaga la lata y aplástala si puedes. Va en la bolsa verde.",
   },
   carton: {
     label: "Cartón",
-    binColor: BIN_COLORS.caja,
-    binName: "Caja de cartón",
-    tip: "Desarma la caja y guárdala plana, seca y limpia, junto con el papel, en una caja aparte.",
+    bag: "carton",
+    tip: "Desármalo y guárdalo plano, seco y limpio. El cartón con grasa ya no se recicla: ese va a la negra.",
   },
   organico: {
     label: "Orgánico",
-    binColor: BIN_COLORS.negra,
-    binName: "Bolsa negra",
-    tip: "Restos de comida y cáscaras van en la bolsa negra (o compóstalos si puedes).",
+    bag: "negra",
+    tip: "Restos y cáscaras van en la bolsa negra — o compóstalos si puedes.",
   },
   general: {
     label: "General",
-    binColor: BIN_COLORS.negra,
-    binName: "Bolsa negra",
-    tip: "Envolturas sucias o mixtas van en la bolsa negra de residuos generales.",
+    bag: "negra",
+    tip: "Envolturas sucias o de varios materiales van en la bolsa negra.",
   },
   desconocido: {
     label: "Sin identificar",
-    binColor: BIN_COLORS.desconocido,
-    binName: "Sin identificar",
-    tip: "Cuéntanos de qué es el envase para decirte dónde va.",
+    bag: "desconocido",
+    tip: "No pudimos confirmar el envase de este producto.",
   },
 };
+
+export function bagFor(material: Material): BagInfo {
+  return BAGS[MATERIALS[material]?.bag ?? "desconocido"];
+}
 
 /**
  * Mejor estimación automática de envase cuando no se pudo determinar

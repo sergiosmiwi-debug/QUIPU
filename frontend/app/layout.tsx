@@ -1,17 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import AmbientPlayer from "@/components/AmbientPlayer";
-import BottomNav from "@/components/BottomNav";
+import Nav from "@/components/Nav";
 
 export const metadata: Metadata = {
-  title: "QuipuRecicla",
+  title: "QuipuRecicla — el quipu de tu casa",
   description:
-    "Rastrea el vencimiento de tus alimentos y aprende a reciclar sus envases.",
+    "Anota lo que entra a tu cocina, entérate antes de que se pase y sabe a qué bolsa va cada envase.",
   manifest: "/manifest.webmanifest",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f4023",
+  themeColor: "#3d2450",
   width: "device-width",
   initialScale: 1,
 };
@@ -25,10 +24,10 @@ export default function RootLayout({
     <html lang="es-PE">
       <body>
         <div className="max-w-md mx-auto min-h-screen relative" style={{ background: "var(--bg)" }}>
-          <AmbientPlayer />
           {children}
-          <div style={{ height: 140 }} />
-          <BottomNav />
+          {/* espacio para la barra de navegación fija */}
+          <div style={{ height: 96 }} aria-hidden />
+          <Nav />
         </div>
       </body>
     </html>
