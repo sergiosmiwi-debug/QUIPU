@@ -15,7 +15,7 @@ import {
 import HeaderWave from "@/components/HeaderWave";
 import MusicButton from "@/components/MusicButton";
 import { api, apiJson } from "@/lib/device";
-import { MATERIALS } from "@/lib/materials";
+import { MATERIALS, guessMaterial } from "@/lib/materials";
 import type { Material, ScanItem } from "@/lib/types";
 
 type Mode = "idle" | "photo" | "voice";
@@ -62,7 +62,7 @@ const NUMBER_WORDS: Record<string, number> = {
   media: 1, medio: 1,
 };
 
-function detectMaterial(text: string): Material {
+function detectMaterial(text: string, name: string): Material {
   const t = text.toLowerCase();
   // Específicas ANTES que las genéricas
   if (t.includes("vidrio") || t.includes("frasco")) return "vidrio";
@@ -70,7 +70,8 @@ function detectMaterial(text: string): Material {
   if (t.includes("caja") || t.includes("cartón") || t.includes("carton")) return "carton";
   if (t.includes("botella") || t.includes("plástico") || t.includes("plastico") || t.includes("bolsa"))
     return "plastico";
-  return "desconocido";
+  // El envase no se mencionó: se estima automáticamente, nunca se le pregunta al usuario.
+  return guessMaterial(name);
 }
 
 function parseTranscript(transcript: string): ScanItem[] {
@@ -94,11 +95,11 @@ function parseTranscript(transcript: string): ScanItem[] {
         rest = wordMatch[2];
       }
     }
-    const material = detectMaterial(rest);
     // limpia palabras de envase del nombre ("botella de", "lata de"…)
     const name = rest
       .replace(/^(botellas?|latas?|frascos?|cajas?|tarros?|bolsas?)\s+(de\s+)?/i, "")
       .trim();
+    const material = detectMaterial(rest, name);
     if (name.length >= 2) {
       items.push({ name, quantity: Math.max(1, quantity), price: 0, material, category: "otros" });
     }

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Check, Lock, Trash, X } from "@phosphor-icons/react";
-import { MATERIALS, likelyMaterials } from "@/lib/materials";
-import type { Material, Product } from "@/lib/types";
+import { MATERIALS } from "@/lib/materials";
+import type { Product } from "@/lib/types";
 
 const STATUS_COLORS: Record<string, { fg: string; bg: string; txt: string; label: string }> = {
   fresh: { fg: "var(--fresh)", bg: "var(--fresh-bg)", txt: "var(--fresh-txt)", label: "Fresco" },
@@ -18,7 +18,6 @@ export default function ProductCard({
   onConsume,
   onWaste,
   onDismiss,
-  onSetMaterial,
   selectMode,
   selected,
   onToggleSelect,
@@ -30,7 +29,6 @@ export default function ProductCard({
   onConsume: () => void;
   onWaste: () => void;
   onDismiss: () => void;
-  onSetMaterial: (m: Material) => void;
   selectMode: boolean;
   selected: boolean;
   onToggleSelect: () => void;
@@ -188,32 +186,6 @@ export default function ProductCard({
               </div>
             </div>
           </div>
-
-          {/* Picker de material si no se identificó */}
-          {product.material === "desconocido" && !selectMode && (
-            <div className="px-4 pb-3">
-              <p style={{ fontSize: 11, color: "var(--ink-2)" }} className="mb-1.5">
-                ¿De qué es el envase?
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {likelyMaterials(product.name).map((m) => (
-                  <button
-                    key={m}
-                    onClick={() => onSetMaterial(m)}
-                    className="rounded-full px-2.5 py-1 active:scale-95 transition-transform"
-                    style={{
-                      fontSize: 11,
-                      background: "var(--muted-bg)",
-                      color: "var(--muted-txt)",
-                      border: "1px solid var(--border)",
-                    }}
-                  >
-                    {MATERIALS[m].label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Fila de acciones */}
           {!selectMode && (

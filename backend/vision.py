@@ -71,7 +71,8 @@ REGLAS EN ORDEN DE PRIORIDAD:
 {TRANSLATION_MAP}
 5. "material" es el material del ENVASE, uno de: plastico, vidrio, metal, carton, organico, general, desconocido.
    - Frutas y verduras sueltas sin envase: organico.
-   - Usa "desconocido" SIEMPRE que el envase no sea visible en la imagen. En tickets impresos el envase NUNCA es visible, así que en tickets usa "desconocido" para todo lo envasado. NUNCA adivines el material.
+   - Si el envase SÍ es visible en la imagen (foto de refrigeradora/alacena), identifica su material real.
+   - Usa "desconocido" SOLO si el envase no es visible en la imagen (siempre el caso en tickets impresos). NUNCA adivines el material a partir del nombre: para eso el sistema ya aplica una corrección automática después de tu respuesta.
 6. "quantity": entero (default 1). "price": precio en soles si es legible en el ticket, si no 0.
 7. "category": una palabra simple (lacteos, carnes, frutas, verduras, abarrotes, bebidas, snacks, panaderia, congelados, otros).
 
@@ -110,8 +111,13 @@ def _parse_json_array(text: str) -> list:
 
 
 def _postfilter(items: list) -> list[dict]:
-    """Descarta filas basura y normaliza campos."""
-    from shelf_life import estimate_price, normalize
+    """Descarta filas basura, normaliza campos y resuelve el material.
+
+    La IA solo puede reportar "desconocido" cuando el envase no es visible
+    (tickets impresos). En ese caso completamos el material automáticamente
+    aquí: el usuario nunca debe tener que elegirlo a mano.
+    """
+    from shelf_life import estimate_price, guess_material, normalize
 
     result = []
     for item in items:
@@ -126,6 +132,8 @@ def _postfilter(items: list) -> list[dict]:
         material = str(item.get("material", "desconocido")).strip().lower()
         if material not in VALID_MATERIALS:
             material = "desconocido"
+        if material == "desconocido":
+            material = guess_material(name)
         try:
             quantity = max(1, int(item.get("quantity", 1) or 1))
         except (TypeError, ValueError):

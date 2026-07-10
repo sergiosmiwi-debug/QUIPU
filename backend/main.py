@@ -32,10 +32,6 @@ class ProductIn(BaseModel):
     category: str = "otros"
 
 
-class MaterialIn(BaseModel):
-    material: str
-
-
 # ---------- Helpers ----------
 
 def compute_status(days_left: int) -> str:
@@ -201,19 +197,6 @@ def waste_product(
     db.delete(product)
     db.commit()
     return {"ok": True}
-
-
-@app.post("/products/{product_id}/material")
-def set_material(
-    product_id: int,
-    body: MaterialIn,
-    device_id: str | None = Depends(require_device),
-    db: Session = Depends(get_db),
-):
-    product = _get_owned(product_id, device_id, db)
-    product.material = body.material
-    db.commit()
-    return serialize(product)
 
 
 # ---------- Dashboard ----------

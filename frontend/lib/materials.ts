@@ -61,19 +61,22 @@ export const MATERIALS: Record<Material, MaterialInfo> = {
   },
 };
 
-/** Materiales más probables según el nombre del producto (picker inline). */
-export function likelyMaterials(name: string): Material[] {
+/**
+ * Mejor estimación automática de envase cuando no se pudo determinar
+ * durante el análisis (p.ej. dictado por voz sin mencionar el envase).
+ * Nunca se le pregunta al usuario: se asigna de una vez.
+ */
+export function guessMaterial(name: string): Material {
   const n = name
     .toLowerCase()
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "");
-  if (n.includes("cerveza")) return ["vidrio", "metal"];
-  if (n.includes("leche")) return ["carton", "plastico", "vidrio"];
-  if (n.includes("atun") || n.includes("conserva")) return ["metal", "vidrio"];
-  if (n.includes("gaseosa") || n.includes("agua")) return ["plastico", "vidrio"];
-  if (n.includes("yogur")) return ["plastico", "vidrio"];
-  if (n.includes("vino") || n.includes("pisco")) return ["vidrio"];
-  if (n.includes("mermelada") || n.includes("mayonesa")) return ["vidrio", "plastico"];
-  if (n.includes("cereal") || n.includes("galleta")) return ["carton", "plastico"];
-  return ["plastico", "vidrio", "metal", "carton"];
+  if (n.includes("cerveza") || n.includes("vino") || n.includes("pisco")) return "vidrio";
+  if (n.includes("mermelada") || n.includes("mayonesa")) return "vidrio";
+  if (n.includes("atun") || n.includes("conserva")) return "metal";
+  if (n.includes("leche") || n.includes("cereal") || n.includes("galleta") || n.includes("jugo"))
+    return "carton";
+  if (n.includes("gaseosa") || n.includes("agua") || n.includes("yogur") || n.includes("aceite"))
+    return "plastico";
+  return "plastico";
 }

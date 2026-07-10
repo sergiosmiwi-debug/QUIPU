@@ -14,7 +14,7 @@ import MusicButton from "@/components/MusicButton";
 import ProductCard from "@/components/ProductCard";
 import { apiJson } from "@/lib/device";
 import { BIN_COLORS } from "@/lib/materials";
-import type { Material, Product } from "@/lib/types";
+import type { Product } from "@/lib/types";
 
 type Filter = "todos" | "urgente" | "pronto" | "frescos" | "vencidos";
 
@@ -115,17 +115,6 @@ export default function InventoryPage() {
   async function handleOpen(id: number) {
     try {
       const updated = await apiJson<Product>(`/products/${id}/open`, { method: "POST" });
-      setProducts((prev) => prev.map((p) => (p.id === id ? updated : p)));
-    } catch {}
-  }
-
-  async function handleSetMaterial(id: number, material: Material) {
-    try {
-      const updated = await apiJson<Product>(`/products/${id}/material`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ material }),
-      });
       setProducts((prev) => prev.map((p) => (p.id === id ? updated : p)));
     } catch {}
   }
@@ -302,7 +291,6 @@ export default function InventoryPage() {
                   apiJson(`/products/${p.id}/consume`, { method: "POST" })
                 )
               }
-              onSetMaterial={(m) => handleSetMaterial(p.id, m)}
             />
           ))
         )}

@@ -231,3 +231,37 @@ def estimate_price(name: str) -> float:
         if key in norm:
             return PRICE_ESTIMATES[key]
     return DEFAULT_PRICE
+
+
+# Envase más probable por producto, para cuando el envase no es visible
+# (tickets impresos) y no hay forma de que la IA lo confirme.
+LIKELY_MATERIAL: dict[str, str] = {
+    "cerveza": "vidrio",
+    "vino": "vidrio",
+    "pisco": "vidrio",
+    "mermelada": "vidrio",
+    "mayonesa": "vidrio",
+    "atun": "metal",
+    "conserva": "metal",
+    "leche evaporada": "metal",
+    "leche condensada": "metal",
+    "leche": "carton",
+    "cereal": "carton",
+    "galleta": "carton",
+    "jugo": "carton",
+    "gaseosa": "plastico",
+    "agua": "plastico",
+    "yogur": "plastico",
+    "aceite": "plastico",
+}
+
+DEFAULT_MATERIAL = "plastico"
+
+
+def guess_material(name: str) -> str:
+    """Mejor estimación de envase cuando la IA no pudo verlo (p.ej. tickets)."""
+    norm = normalize(name)
+    for key in sorted(LIKELY_MATERIAL, key=len, reverse=True):
+        if key in norm:
+            return LIKELY_MATERIAL[key]
+    return DEFAULT_MATERIAL
